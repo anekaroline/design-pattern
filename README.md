@@ -20,18 +20,6 @@ Agradeço pela sua compreensão e espero que as informações fornecidas sejam �
 
 Neste repositório, você encontrará exemplos práticos dos padrões de projeto implementados em Kotlin. Os exemplos foram desenvolvidos de forma a facilitar o entendimento e demonstrar a aplicação dos padrões em situações reais.
 
-## Como Contribuir
-
-Contribuições são altamente encorajadas! Se você deseja contribuir com este repositório, siga os passos abaixo:
-
-1. Faça um fork deste repositório.
-2. Crie um branch para a sua contribuição: `git checkout -b minha-contribuicao`.
-3. Faça as alterações desejadas e adicione uma descrição clara do que foi feito.
-4. Envie suas alterações: `git push origin minha-contribuicao`.
-5. Abra um Pull Request para revisão das alterações.
-
-Vamos trabalhar juntos para aprimorar o conhecimento sobre padrões de projeto e tornar este repositório uma referência para a comunidade.
-
 ## Padrões de Projeto
 
 A seguir, são apresentados os principais padrões de projeto abordados neste repositório:
