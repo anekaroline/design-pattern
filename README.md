@@ -20,6 +20,12 @@ Agradeço pela sua compreensão e espero que as informações fornecidas sejam �
 
 Neste repositório, você encontrará exemplos práticos dos padrões de projeto implementados em Kotlin. Os exemplos foram desenvolvidos de forma a facilitar o entendimento e demonstrar a aplicação dos padrões em situações reais.
 
+## Sumário
+
+- [Padrões de Criação: Factory Method](#padrões-de-criação-factory-method)
+- [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
+- [Padrões de Criação: Builder](#padrões-de-criação-builder)
+
 ## Padrões de Projeto
 
 A seguir, são apresentados os principais padrões de projeto abordados neste repositório:
