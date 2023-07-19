@@ -26,7 +26,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
-- [Padrões de Estrutura: Bridge](#padrões-de-projeto-bridge)
+- [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
 
 ## Padrões de Projeto
 
@@ -528,7 +528,7 @@ No `main()`, podemos ver que a classe `Paypal` é usada diretamente, chamando se
 
 Observação: Essa é uma explicação básica do padrão Adapter. Para aplicar corretamente o padrão em situações mais complexas, é importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao adaptar interfaces de classes.
 
-## Padrões de Projeto: Bridge
+## Padrões de Estrutura: Bridge
 
 O padrão de projeto Bridge é um padrão estrutural que tem como objetivo separar a abstração (interface) da implementação, permitindo que ambas possam variar independentemente. Essa separação é útil quando existem múltiplas dimensões de variação em um sistema.
 
