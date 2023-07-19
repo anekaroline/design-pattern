@@ -26,6 +26,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
+- [Padrões de Estrutura: Bridge](#padrões-de-projeto-bridge)
 
 ## Padrões de Projeto
 
@@ -526,6 +527,111 @@ No `main()`, podemos ver que a classe `Paypal` é usada diretamente, chamando se
 - Promove a interoperabilidade entre diferentes classes e componentes.
 
 Observação: Essa é uma explicação básica do padrão Adapter. Para aplicar corretamente o padrão em situações mais complexas, é importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao adaptar interfaces de classes.
+
+## Padrões de Projeto: Bridge
+
+O padrão de projeto Bridge é um padrão estrutural que tem como objetivo separar a abstração (interface) da implementação, permitindo que ambas possam variar independentemente. Essa separação é útil quando existem múltiplas dimensões de variação em um sistema.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo uma aplicação de transmissão ao vivo. Nessa aplicação, você tem várias plataformas de streaming, como YouTube, TwitchTV e Facebook.
+
+### Problema
+
+Você precisa implementar a capacidade de fazer transmissões ao vivo em diferentes plataformas, mas não quer que a lógica de streaming específica de cada plataforma fique diretamente acoplada à lógica de negócio da aplicação.
+
+### Solução
+
+O padrão Bridge resolve esse problema dividindo a hierarquia de classes em duas partes: a parte abstrata (abstraction) e a parte implementadora (implementor). A parte abstrata define a interface que será utilizada pela aplicação, enquanto a parte implementadora define a interface que será usada pelas classes concretas de implementação.
+
+### Exemplo em Kotlin
+
+```kotlin
+// Parte Abstrata
+interface LiveStreaming {
+    fun start()
+    fun stop()
+}
+
+// Parte Implementadora
+interface Platform {
+    fun startLiveStream()
+    fun endLiveStream()
+}
+
+// Implementações da Parte Implementadora
+class YoutubePlatform : Platform {
+    override fun startLiveStream() {
+        println("Iniciando a transmissão no Youtube")
+    }
+
+    override fun endLiveStream() {
+        println("Encerrando a transmissão no Youtube")
+    }
+}
+
+class TwitchTVPlatform : Platform {
+    override fun startLiveStream() {
+        println("Iniciando a transmissão na TwitchTV")
+    }
+
+    override fun endLiveStream() {
+        println("Encerrando a transmissão na TwitchTV")
+    }
+}
+
+class FacebookPlatform : Platform {
+    override fun startLiveStream() {
+        println("Iniciando a transmissão no Facebook")
+    }
+
+    override fun endLiveStream() {
+        println("Encerrando a transmissão no Facebook")
+    }
+}
+
+// Implementações da Parte Abstrata
+class LiveStream(private val platform: Platform) : LiveStreaming {
+    override fun start() {
+        platform.startLiveStream()
+    }
+
+    override fun stop() {
+        platform.endLiveStream()
+    }
+}
+
+fun main() {
+    val youtubeLive: LiveStreaming = LiveStream(YoutubePlatform())
+    val twitchLive: LiveStreaming = LiveStream(TwitchTVPlatform())
+    val facebookLive: LiveStreaming = LiveStream(FacebookPlatform())
+
+    youtubeLive.start()
+    twitchLive.start()
+    facebookLive.start()
+
+    youtubeLive.stop()
+    twitchLive.stop()
+    facebookLive.stop()
+}
+```
+
+Neste exemplo, definimos a parte abstrata `LiveStreaming`, que representa a interface para iniciar e encerrar a transmissão. Em seguida, temos a parte implementadora `Platform`, que define a interface para as diferentes plataformas de streaming. As classes concretas de implementação, como `YoutubePlatform`, `TwitchTVPlatform` e `FacebookPlatform`, implementam a interface `Platform` de acordo com suas respectivas plataformas.
+
+A parte abstrata `StreamType` representa o tipo de transmissão (vídeo ou áudio). As classes concretas `VideoStream` e `AudioStream` implementam essa interface e fornecem o tipo de transmissão específico.
+
+A classe `LiveStream` é a implementação concreta da parte abstrata `LiveStreaming`, que recebe uma instância da plataforma de streaming específica e do tipo de transmissão em seu construtor e delega as chamadas de `start()` e `stop()` para as respectivas plataformas e tipos de transmissão.
+
+Dessa forma, o padrão Bridge desacopla a lógica de negócio da transmissão ao vivo da lógica específica de cada plataforma de streaming e tipo de transmissão, permitindo que ambas variem independentemente. Se uma nova plataforma ou tipo de transmissão for adicionado, basta criar novas classes concretas que implementem as interfaces `Platform` e `StreamType`, sem precisar alterar as classes existentes.
+
+**Benefícios do padrão Bridge:**
+- Desacopla abstração de implementação.
+- Permite a extensão independente das duas partes.
+- Facilita a adição de novas funcionalidades sem modificar o código existente.
+- Melhora a legibilidade e manutenção do código.
+
+Observação: Lembre-se de que este é um exemplo simples do padrão Bridge e pode ser mais complexo dependendo do contexto e dos requisitos do sistema.
+
 
 
 ## Licença
