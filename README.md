@@ -301,6 +301,158 @@ No exemplo acima, temos as seguintes características do padrão Abstract Factor
 
 Observação: Essa é uma explicação básica do padrão Abstract Factory. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
 
+## Padrões de Criação: Builder
+O padrão Builder é um padrão de projeto criacional que permite a construção de objetos complexos passo a passo. Ele separa o processo de construção do objeto final da sua representação, permitindo que o mesmo processo de construção possa criar diferentes representações do objeto.
+
+### Contexto
+Imagine que você esteja desenvolvendo um sistema para construir casas com diferentes estilos arquitetônicos, como casas modernas e casas rústicas. Cada tipo de casa tem características específicas, como área, número de quartos, número de banheiros e presença ou ausência de garagem.
+
+### Problema
+Você precisa criar objetos de casas com diferentes estilos e especificações de forma flexível. No entanto, a criação direta dos objetos de casa em todo o código resultaria em um código complexo e pouco legível.
+
+### Solução
+Nesta solução, utilizamos o padrão Builder para construir objetos de casas com diferentes estilos arquitetônicos. Primeiro, definimos a interface `Builder`, que possui métodos para definir as características da casa, como `setArea()`, `setNumeroQuartos()`, `setNumeroBanheiros()` e `setGaragem()`. As classes `CasaModernaBuilder` e `CasaRusticaBuilder` implementam a interface `Builder`, permitindo a criação de casas modernas e casas rústicas, respectivamente.
+
+A classe `Diretor` é responsável por dirigir o processo de construção de casas, utilizando um determinado tipo de builder. Ele define métodos como `construirCasaModerna()` e `construirCasaRustica()`, que utilizam os métodos do builder para definir as características da casa e retornar o objeto final.
+
+Ao utilizar o padrão Builder, o código principal pode criar casas chamando os métodos do builder apropriado, sem se preocupar com a lógica detalhada de construção da casa. Dessa forma, o padrão Builder permite a construção passo a passo de objetos complexos, com diferentes combinações de características, mantendo o código limpo e legível.
+
+
+### Exemplo em Kotlin
+```kotlin
+class CasaModerna(
+    var area: Int = 0,
+    var numeroQuartos: Int = 0,
+    var numeroBanheiros: Int = 0,
+    var garagem: Boolean = false
+){
+    fun result(): String{
+        return "Casa moderna: área = $area m², número de quartos = $numeroQuartos, número de banheiros = $numeroBanheiros, garagem = $garagem"
+    }
+}
+
+class CasaRustica(
+    var area: Int = 0,
+    var numeroQuartos: Int = 0,
+    var numeroBanheiros: Int = 0,
+    var garagem: Boolean = false
+){
+    fun result(): String{
+        return "Casa rústica: área = $area m², número de quartos = $numeroQuartos, número de banheiros = $numeroBanheiros, garagem = $garagem"
+    }
+}
+
+interface Builder{
+    fun setArea(area: Int): Builder
+    fun setNumeroQuartos(numeroQuartos: Int): Builder
+    fun setNumeroBanheiros(numeroBanheiros: Int): Builder
+    fun setGaragem(garagem: Boolean): Builder
+    fun build(): Any
+}
+
+class CasaModernaBuilder() : Builder{
+
+    private var casa: CasaModerna = CasaModerna()
+    override fun setArea(area: Int): Builder {
+        casa.area = area
+        return this
+    }
+
+    override fun setNumeroQuartos(numeroQuartos: Int): Builder {
+        casa.numeroQuartos = numeroQuartos
+        return this
+    }
+
+    override fun setNumeroBanheiros(numeroBanheiros: Int): Builder {
+        casa.numeroBanheiros = numeroBanheiros
+        return this
+    }
+
+    override fun setGaragem(garagem: Boolean): Builder {
+        casa.garagem = garagem
+        return this
+    }
+
+    override fun build(): CasaModerna {
+        return casa
+    }
+
+}
+
+class CasaRusticaBuilder() : Builder{
+
+    private var casa: CasaRustica = CasaRustica()
+    override fun setArea(area: Int): Builder {
+        casa.area = area
+        return this
+    }
+
+    override fun setNumeroQuartos(numeroQuartos: Int): Builder {
+        casa.numeroQuartos = numeroQuartos
+        return this
+    }
+
+    override fun setNumeroBanheiros(numeroBanheiros: Int): Builder {
+        casa.numeroBanheiros = numeroBanheiros
+        return this
+    }
+
+    override fun setGaragem(garagem: Boolean): Builder {
+        casa.garagem = garagem
+        return this
+    }
+
+    override fun build(): CasaRustica {
+        return casa
+    }
+
+}
+
+class Diretor{
+    fun construirCasaModerna(builder: Builder): Any {
+        return builder.setArea(200)
+            .setNumeroQuartos(3)
+            .setNumeroBanheiros(2)
+            .setGaragem(true)
+            .build()
+    }
+
+    fun construirCasaRustica(builder: Builder): Any{
+        return builder.setArea(150)
+            .setNumeroQuartos(2)
+            .setNumeroBanheiros(1)
+            .build()
+    }
+}
+
+fun main() {
+    val diretor = Diretor()
+
+    val casaModernaBuilder: Builder = CasaModernaBuilder()
+    val casaModerna: CasaModerna = diretor.construirCasaModerna(casaModernaBuilder) as CasaModerna
+    println(casaModerna.result())
+
+    val casaRusticaBuilder: Builder = CasaRusticaBuilder()
+    val casaRustica: CasaRustica = diretor.construirCasaRustica(casaRusticaBuilder) as CasaRustica
+    println(casaRustica.result())
+}
+```
+
+No exemplo em Kotlin, utilizamos as classes `CasaModerna` e `CasaRustica` para representar os diferentes estilos de casas. As classes `CasaModernaBuilder` e `CasaRusticaBuilder` implementam a interface `Builder`, permitindo a construção de casas modernas e casas rústicas, respectivamente.
+
+A classe `Diretor` possui métodos `construirCasaModerna()` e `construirCasaRustica()` que utilizam os métodos do builder para definir as características da casa e retornar o objeto final.
+
+No código de exemplo, criamos instâncias de `CasaModerna` e `CasaRustica` utilizando os builders apropriados. Chamamos o método `result()` em cada uma das casas para exibir as características específicas de cada estilo de casa.
+
+**Benefícios do padrão Builder:**
+- Permite construir objetos complexos passo a passo, separando a lógica de construção da representação do objeto.
+- Facilita a criação de diferentes representações do mesmo objeto, usando os mesmos passos de construção.
+- Melhora a legibilidade e manutenção do código, evitando construtores com muitos parâmetros.
+- Facilita a adição de novas características ou estilos de objetos sem modificar a lógica do construtor.
+
+Observação: Essa é uma explicação básica do padrão Builder. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
+
+
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
