@@ -25,6 +25,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Factory Method](#padrões-de-criação-factory-method)
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
+- [Padrões de Criação: Adapter](#padrões-de-criação-adapter)
 
 ## Padrões de Projeto
 
@@ -457,6 +458,72 @@ No código de exemplo, criamos instâncias de `CasaModerna` e `CasaRustica` util
 - Facilita a adição de novas características ou estilos de objetos sem modificar a lógica do construtor.
 
 Observação: Essa é uma explicação básica do padrão Builder. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
+
+## Padrões de Criação: Adapter
+
+O padrão Adapter é um dos padrões de projeto estruturais mais utilizados. Ele permite que classes com interfaces incompatíveis trabalhem juntas, facilitando a reutilização de código existente e evitando a necessidade de modificar o código fonte original.
+
+### Contexto
+
+Imagine que você esteja trabalhando em um sistema de pagamento online. Nesse sistema, você possui duas classes que lidam com diferentes provedores de pagamento: `Paypal` e `Payonner`. Cada provedor de pagamento possui sua própria interface de pagamento específica.
+
+### Problema
+
+Você deseja utilizar ambas as classes `Paypal` e `Payonner` para processar pagamentos no seu sistema. No entanto, para isso, seria necessário adaptar a interface de pelo menos uma das classes, para que ambas pudessem ser usadas de forma intercambiável.
+
+### Solução
+
+Nesta solução, utilizamos o padrão Adapter para permitir que as classes `Paypal` e `Payonner` sejam usadas de forma transparente no sistema de pagamento. Criamos uma nova classe chamada `AdapterPaypal`, que implementa a interface `PaypalPayment` (que já existia no código original). Essa nova classe atua como um adaptador e possui uma referência para a classe `Payonner`, que não implementa a interface `PaypalPayment`.
+
+A classe `AdapterPaypal` implementa os métodos da interface `PaypalPayment` e, dentro desses métodos, chama os métodos equivalentes da classe `Payonner`. Dessa forma, a classe `Paypal` e a classe `Payonner` podem ser usadas de forma intercambiável, mesmo tendo interfaces diferentes.
+
+### Exemplo em Kotlin
+
+```kotlin
+interface PaypalPayment {
+    fun payWithPayPal()
+}
+
+interface PayonnerPayment {
+    fun payWithPayonner()
+}
+
+class Paypal : PaypalPayment {
+    override fun payWithPayPal() {
+        println("Pagamento feito com PayPal.")
+    }
+}
+
+class Payonner : PayonnerPayment {
+    override fun payWithPayonner() {
+        println("Pagamento feito com Payonner.")
+    }
+}
+
+class AdapterPayoneer(private val payonner: Payonner) : PaypalPayment {
+    override fun payWithPayPal() {
+        payonner.payWithPayonner()
+    }
+}
+
+fun main() {
+    val paypalPayment: PaypalPayment = Paypal()
+    paypalPayment.payWithPayPal()
+
+    val adapterPayoneer: PaypalPayment = AdapterPayoneer(Payonner())
+    adapterPayoneer.payWithPayPal()
+}
+No exemplo em Kotlin, temos as interfaces `PaypalPayment` e `PayonnerPayment`, bem como as classes concretas `Paypal` e `Payonner`. Criamos a classe `AdapterPayoneer`, que implementa `PaypalPayment` e atua como um adaptador para `Payonner`.
+
+No `main()`, podemos ver que a classe `Paypal` é usada diretamente, chamando seu método `payWithPayPal()`. Em seguida, utilizamos o `AdapterPayoneer` para adaptar a classe `Payonner` e permitir que ela seja usada através da interface `PaypalPayment`, chamando também o método `payWithPayPal()`.
+
+**Benefícios do padrão Adapter:**
+- Permite a reutilização de código existente mesmo em classes com interfaces incompatíveis.
+- Ajuda a evitar a modificação de código fonte original ao adicionar novas funcionalidades.
+- Facilita a integração de classes de terceiros em sistemas existentes.
+- Promove a interoperabilidade entre diferentes classes e componentes.
+
+Observação: Essa é uma explicação básica do padrão Adapter. Para aplicar corretamente o padrão em situações mais complexas, é importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao adaptar interfaces de classes.
 
 
 ## Licença
