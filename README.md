@@ -459,7 +459,7 @@ No código de exemplo, criamos instâncias de `CasaModerna` e `CasaRustica` util
 
 Observação: Essa é uma explicação básica do padrão Builder. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
 
-## ## Padrões de Estrutura: Adapter
+## Padrões de Estrutura: Adapter
 
 O padrão Adapter é um dos padrões de projeto estruturais mais utilizados. Ele permite que classes com interfaces incompatíveis trabalhem juntas, facilitando a reutilização de código existente e evitando a necessidade de modificar o código fonte original.
 
