@@ -25,7 +25,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Factory Method](#padrões-de-criação-factory-method)
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
-- [Padrões de Criação: Adapter](#padrões-de-criação-adapter)
+- [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
 
 ## Padrões de Projeto
 
@@ -459,7 +459,7 @@ No código de exemplo, criamos instâncias de `CasaModerna` e `CasaRustica` util
 
 Observação: Essa é uma explicação básica do padrão Builder. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
 
-## Padrões de Criação: Adapter
+## ## Padrões de Estrutura: Adapter
 
 O padrão Adapter é um dos padrões de projeto estruturais mais utilizados. Ele permite que classes com interfaces incompatíveis trabalhem juntas, facilitando a reutilização de código existente e evitando a necessidade de modificar o código fonte original.
 
