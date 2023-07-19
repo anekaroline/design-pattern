@@ -473,9 +473,9 @@ Você deseja utilizar ambas as classes `Paypal` e `Payonner` para processar paga
 
 ### Solução
 
-Nesta solução, utilizamos o padrão Adapter para permitir que as classes `Paypal` e `Payonner` sejam usadas de forma transparente no sistema de pagamento. Criamos uma nova classe chamada `AdapterPaypal`, que implementa a interface `PaypalPayment` (que já existia no código original). Essa nova classe atua como um adaptador e possui uma referência para a classe `Payonner`, que não implementa a interface `PaypalPayment`.
+Nesta solução, utilizamos o padrão Adapter para permitir que as classes `Paypal` e `Payonner` sejam usadas de forma transparente no sistema de pagamento. Criamos uma nova classe chamada `AdapterPayoneer`, que implementa a interface `PaypalPayment` (que já existia no código original). Essa nova classe atua como um adaptador e possui uma referência para a classe `Payonner`, que não implementa a interface `PaypalPayment`.
 
-A classe `AdapterPaypal` implementa os métodos da interface `PaypalPayment` e, dentro desses métodos, chama os métodos equivalentes da classe `Payonner`. Dessa forma, a classe `Paypal` e a classe `Payonner` podem ser usadas de forma intercambiável, mesmo tendo interfaces diferentes.
+A classe `AdapterPayoneer` implementa os métodos da interface `PaypalPayment` e, dentro desses métodos, chama os métodos equivalentes da classe `Payonner`. Dessa forma, a classe `Paypal` e a classe `Payonner` podem ser usadas de forma intercambiável, mesmo tendo interfaces diferentes.
 
 ### Exemplo em Kotlin
 
