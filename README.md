@@ -618,11 +618,9 @@ fun main() {
 
 Neste exemplo, definimos a parte abstrata `LiveStreaming`, que representa a interface para iniciar e encerrar a transmissão. Em seguida, temos a parte implementadora `Platform`, que define a interface para as diferentes plataformas de streaming. As classes concretas de implementação, como `YoutubePlatform`, `TwitchTVPlatform` e `FacebookPlatform`, implementam a interface `Platform` de acordo com suas respectivas plataformas.
 
-A parte abstrata `StreamType` representa o tipo de transmissão (vídeo ou áudio). As classes concretas `VideoStream` e `AudioStream` implementam essa interface e fornecem o tipo de transmissão específico.
-
 A classe `LiveStream` é a implementação concreta da parte abstrata `LiveStreaming`, que recebe uma instância da plataforma de streaming específica e do tipo de transmissão em seu construtor e delega as chamadas de `start()` e `stop()` para as respectivas plataformas e tipos de transmissão.
 
-Dessa forma, o padrão Bridge desacopla a lógica de negócio da transmissão ao vivo da lógica específica de cada plataforma de streaming e tipo de transmissão, permitindo que ambas variem independentemente. Se uma nova plataforma ou tipo de transmissão for adicionado, basta criar novas classes concretas que implementem as interfaces `Platform` e `StreamType`, sem precisar alterar as classes existentes.
+Dessa forma, o padrão Bridge desacopla a lógica de negócio da transmissão ao vivo da lógica específica de cada plataforma de streaming e tipo de transmissão, permitindo que ambas variem independentemente. Se uma nova plataforma for adicionada, basta criar novas classes concretas que implementem a interface `Platform`, sem precisar alterar as classes existentes.
 
 **Benefícios do padrão Bridge:**
 - Desacopla abstração de implementação.
