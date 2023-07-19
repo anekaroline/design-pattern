@@ -513,6 +513,8 @@ fun main() {
     val adapterPayoneer: PaypalPayment = AdapterPayoneer(Payonner())
     adapterPayoneer.payWithPayPal()
 }
+
+```
 No exemplo em Kotlin, temos as interfaces `PaypalPayment` e `PayonnerPayment`, bem como as classes concretas `Paypal` e `Payonner`. Criamos a classe `AdapterPayoneer`, que implementa `PaypalPayment` e atua como um adaptador para `Payonner`.
 
 No `main()`, podemos ver que a classe `Paypal` é usada diretamente, chamando seu método `payWithPayPal()`. Em seguida, utilizamos o `AdapterPayoneer` para adaptar a classe `Payonner` e permitir que ela seja usada através da interface `PaypalPayment`, chamando também o método `payWithPayPal()`.
