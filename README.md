@@ -25,6 +25,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Factory Method](#padrões-de-criação-factory-method)
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
+- [Padrões de Criação: Singleton](#padrões-de-criação-singleton)
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
 - [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
 
@@ -459,6 +460,65 @@ No código de exemplo, criamos instâncias de `CasaModerna` e `CasaRustica` util
 - Facilita a adição de novas características ou estilos de objetos sem modificar a lógica do construtor.
 
 Observação: Essa é uma explicação básica do padrão Builder. É importante estudar mais sobre o assunto e considerar outros aspectos e possibilidades ao aplicar o padrão em diferentes contextos.
+
+## Padrões de Criação: Singleton
+
+O padrão de projeto Singleton é um padrão de criação que garante que uma classe tenha apenas uma instância e forneça um ponto de acesso global para essa instância. Esse padrão é útil em situações em que é necessário restringir a criação de objetos de uma determinada classe para uma única instância, compartilhada por todo o sistema.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo um aplicativo para configurar e gerenciar a aplicação como um todo. Nesse contexto, existem certas configurações que precisam ser acessadas e modificadas de várias partes do código, mas você quer garantir que essas configurações permaneçam consistentes em todo o aplicativo.
+
+### Problema
+
+O problema aqui é que você precisa de uma única instância da classe de configuração para evitar duplicação de dados e inconsistências no sistema. Além disso, é importante que todas as partes do aplicativo acessem a mesma instância para manter a consistência das configurações.
+
+### Solução em Kotlin
+
+Em Kotlin, o padrão Singleton pode ser implementado de maneira simples e eficaz usando um objeto (object). A palavra-chave `object` define uma classe e cria uma única instância desse objeto durante toda a execução do programa.
+
+```kotlin
+object AppConfig {
+    private var appName: String = "Singleton"
+    private var appVersion: String = "1.0.0"
+
+    fun getAppName(): String {
+        return appName
+    }
+
+    fun getAppVersion(): String {
+        return appVersion
+    }
+}
+
+fun main() {
+    val config1 = AppConfig
+    val config2 = AppConfig
+
+    println(config1.getAppName())
+    println(config2.getAppVersion())
+
+    println(config1 === config2)
+}
+```
+Neste exemplo, criamos o objeto `AppConfig`, que representa a configuração do aplicativo. A classe é declarada como `object`, o que significa que só haverá uma única instância dela durante toda a execução do programa.
+
+O objeto `AppConfig` possui duas propriedades privadas: `appName` e `appVersion`, bem como dois métodos públicos `getAppName()` e `getAppVersion()`, que permitem acessar as configurações do aplicativo.
+
+No `main()`, criamos duas variáveis `config1` e `config2` que recebem a instância do objeto `AppConfig`. Como o objeto é um singleton, ambas as variáveis apontam para a mesma instância, como podemos verificar usando o operador `===` de igualdade de referência.
+
+**Benefícios do padrão Singleton:**
+
+- Garantia de uma única instância: O padrão Singleton garante que uma classe tenha apenas uma instância durante a execução do programa, evitando a criação de múltiplas instâncias desnecessárias e reduzindo o consumo de recursos do sistema.
+
+- Acesso global: A instância única criada pelo Singleton pode ser acessada de qualquer lugar do código, tornando-o um ponto de acesso global para compartilhar informações e funcionalidades importantes em todo o sistema.
+
+- Evita inconsistências: Ao garantir que apenas uma instância exista, o padrão Singleton ajuda a manter a consistência dos dados e configurações em todo o aplicativo, já que todos os componentes acessam a mesma instância.
+
+**Observação:** O padrão Singleton deve ser usado com cuidado, pois o acesso global à instância única pode tornar o código mais difícil de testar e aumentar o acoplamento entre os componentes. É essencial considerar as necessidades específicas do projeto antes de optar por usar esse padrão.
+
+Lembre-se de que o exemplo apresentado é uma implementação simples do padrão Singleton em Kotlin, destinado apenas para fins ilustrativos. Em projetos mais complexos, podem ser aplicadas técnicas adicionais, como garantir a thread safety em ambientes concorrentes ou aplicar padrões de injeção de dependência, para garantir uma utilização mais robusta do padrão Singleton.
+
 
 ## Padrões de Estrutura: Adapter
 
