@@ -26,6 +26,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Abstract Factory](#padrões-de-criação-abstract-factory)
 - [Padrões de Criação: Builder](#padrões-de-criação-builder)
 - [Padrões de Criação: Singleton](#padrões-de-criação-singleton)
+- [Padrões de Criação: Prototype](#padrões-de-criação-prototype)
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
 - [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
 
@@ -518,6 +519,89 @@ No `main()`, criamos duas variáveis `config1` e `config2` que recebem a instân
 **Observação:** O padrão Singleton deve ser usado com cuidado, pois o acesso global à instância única pode tornar o código mais difícil de testar e aumentar o acoplamento entre os componentes. É essencial considerar as necessidades específicas do projeto antes de optar por usar esse padrão.
 
 Lembre-se de que o exemplo apresentado é uma implementação simples do padrão Singleton em Kotlin, destinado apenas para fins ilustrativos. Em projetos mais complexos, podem ser aplicadas técnicas adicionais, como garantir a thread safety em ambientes concorrentes ou aplicar padrões de injeção de dependência, para garantir uma utilização mais robusta do padrão Singleton.
+
+
+## Padrões de Criação: Prototype
+
+O padrão de projeto Prototype é um padrão de criação que permite a clonagem de objetos, evitando a necessidade de criar novas instâncias através de construtores. Esse padrão é útil quando precisamos criar cópias de objetos complexos de forma eficiente, sem a necessidade de recriar a estrutura completa do objeto.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo um jogo de RPG, onde existem vários tipos de monstros, cada um com atributos específicos, como nome e nível. Ao longo do jogo, você precisa criar múltiplas instâncias de monstros para representar as diferentes criaturas que os jogadores encontrarão.
+
+### Problema
+
+Você precisa criar cópias de monstros existentes para evitar a sobrecarga de construtores e permitir que os jogadores encontrem monstros com características variadas sem criar novas instâncias a partir do zero.
+
+### Solução
+
+O padrão Prototype resolve esse problema ao permitir que cada tipo de monstro implemente uma interface de clonagem (normalmente chamada de `Cloneable`), que define um método de clonagem. Cada monstro concreto deve implementar esse método de clonagem para retornar uma cópia de si mesmo.
+
+### Exemplo em Kotlin
+
+```kotlin
+open class Monster(
+    var name: String,
+    var level: Int
+): Cloneable {
+    public override fun clone(): Monster {
+        return Monster(name, level)
+    }
+}
+
+class OrcMonster(
+    name: String,
+    level: Int
+): Monster(name, level)
+
+class GoblinMonster(
+    name: String,
+    level: Int
+): Monster(name, level)
+
+class MonsterPrototype {
+    private val monsterPrototypes = mutableMapOf<String, Monster>()
+
+    fun registerMonster(name: String, monster: Monster) {
+        monsterPrototypes[name] = monster
+    }
+
+    fun cloneMonster(type: String): Monster? {
+        val prototype = monsterPrototypes[type]
+        return prototype?.clone()
+    }
+}
+
+fun main() {
+    val monsterPrototype = MonsterPrototype()
+    monsterPrototype.registerMonster("orc", OrcMonster("Orc", 1))
+    monsterPrototype.registerMonster("goblin", GoblinMonster("Goblin", 4))
+
+    val orc = monsterPrototype.cloneMonster("orc")
+    val goblin = monsterPrototype.cloneMonster("goblin")
+
+    orc?.name = "Orcus"
+    goblin?.level = 5
+
+    println("Monstro Orc Original: ${monsterPrototype.cloneMonster("orc")?.name} (Nível ${monsterPrototype.cloneMonster("orc")?.level})")
+    println("Monstro Orc Clonado: ${orc?.name} (Nível ${orc?.level})")
+    println("Monstro Goblin Original: ${monsterPrototype.cloneMonster("goblin")?.name} (Nível ${monsterPrototype.cloneMonster("goblin")?.level})")
+    println("Monstro Goblin Clonado: ${goblin?.name} (Nível ${goblin?.level})")
+}
+```
+Neste exemplo, temos uma classe abstrata `Monster`, que representa o protótipo dos monstros do jogo, com atributos como `name` e `level`. As classes `OrcMonster` e `GoblinMonster` são classes concretas que herdam de `Monster`.
+
+A classe `MonsterPrototype` é a responsável por manter um registro dos diferentes tipos de monstros (protótipos) que podem ser clonados. Ela oferece um método `registerMonster` para adicionar monstros ao registro e um método `cloneMonster` para clonar o monstro desejado.
+
+Ao executar o programa, podemos ver que a clonagem é efetiva, pois ao modificar as instâncias clonadas (`orc` e `goblin`), os monstros originais permanecem inalterados. Isso demonstra como o padrão Prototype permite criar cópias independentes de objetos complexos com facilidade, economizando tempo e recursos.
+
+**Benefícios do padrão Prototype:**
+- Permite a clonagem de objetos complexos sem a necessidade de recriar a estrutura completa.
+- Evita a sobrecarga de construtores ao criar múltiplas instâncias de objetos similares.
+- Facilita a criação de objetos com configurações variadas.
+- Reduz o acoplamento entre classes ao permitir a clonagem através de interfaces.
+
+Observação: Lembre-se de que este é um exemplo simples do padrão Prototype e pode ser mais complexo dependendo do contexto e dos requisitos do jogo.
 
 
 ## Padrões de Estrutura: Adapter
