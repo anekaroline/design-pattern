@@ -29,7 +29,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Criação: Prototype](#padrões-de-criação-prototype)
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
 - [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
-
+- [Padrões de Estrutura: Composite](#padrões-de-estrutura-composite)
 ## Padrões de Projeto
 
 A seguir, são apresentados os principais padrões de projeto abordados neste repositório:
@@ -602,6 +602,80 @@ Ao executar o programa, podemos ver que a clonagem é efetiva, pois ao modificar
 - Reduz o acoplamento entre classes ao permitir a clonagem através de interfaces.
 
 Observação: Lembre-se de que este é um exemplo simples do padrão Prototype e pode ser mais complexo dependendo do contexto e dos requisitos do jogo.
+
+
+## Padrões de Estrutura: Composite
+
+O padrão de projeto Composite é um padrão estrutural que permite tratar objetos individuais e suas composições de forma uniforme. Ele é utilizado quando queremos representar hierarquias de objetos em uma estrutura de árvore, permitindo que clientes tratem objetos individuais e grupos de objetos de maneira transparente.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo um sistema para gerenciar tripulantes de uma nave espacial. Os tripulantes podem ser de dois tipos: tripulantes simples (indivíduos) ou grupos de tripulantes (agrupamentos de indivíduos ou outros grupos).
+
+### Problema
+
+Você precisa permitir que os clientes da sua aplicação tratem os tripulantes e grupos de tripulantes de forma uniforme, sem se preocupar se estão lidando com um tripulante individual ou com um grupo de tripulantes.
+
+### Solução
+
+O padrão Composite resolve esse problema definindo uma interface comum para todos os objetos que podem fazer parte da estrutura da árvore. Essa interface, geralmente chamada de "Componente", declara operações comuns que podem ser realizadas tanto por objetos individuais quanto por grupos. Além disso, a classe "Componente" pode conter operações para adicionar e remover componentes filhos, permitindo a formação da estrutura em árvore.
+
+### Exemplo em Kotlin
+
+```kotlin
+interface Tripulante {
+    fun tripular()
+}
+
+class TripulanteSimples(var nome: String) : Tripulante {
+    override fun tripular() {
+        println("Tripulante: $nome")
+    }
+}
+
+class GrupoTripulantes(var tripulantes: MutableList<Tripulante> = mutableListOf()) : Tripulante {
+    override fun tripular() {
+        tripulantes.forEach { it.tripular() }
+    }
+
+    fun addTripulante(tripulante: Tripulante) {
+        tripulantes.add(tripulante)
+    }
+
+    fun removeTripulante(tripulante: Tripulante) {
+        tripulantes.remove(tripulante)
+    }
+}
+
+fun main() {
+    val tripulante1 = TripulanteSimples("João")
+    val tripulante2 = TripulanteSimples("Maria")
+    val tripulante3 = TripulanteSimples("Pedro")
+
+    val grupoOficiais = GrupoTripulantes()
+    grupoOficiais.addTripulante(tripulante1)
+    grupoOficiais.addTripulante(tripulante2)
+
+    val grupoTripulantes = GrupoTripulantes()
+    grupoTripulantes.addTripulante(tripulante3)
+    grupoTripulantes.addTripulante(grupoOficiais)
+
+    println("---- Tripulação da Nave ----")
+    grupoTripulantes.tripular()
+}
+```
+
+Neste exemplo, temos a interface `Tripulante`, que define a operação comum `tripular()` para todos os objetos que fazem parte da estrutura da árvore. A classe `TripulanteSimples` representa os tripulantes individuais, enquanto a classe `GrupoTripulantes` representa os grupos de tripulantes.
+
+Ambas as classes implementam a interface `Tripulante`, permitindo que os clientes da aplicação tratem tripulantes individuais e grupos de tripulantes da mesma forma. O método `tripular()` em `GrupoTripulantes` é responsável por chamar a mesma operação em todos os tripulantes que fazem parte do grupo, formando assim a estrutura em árvore.
+
+**Benefícios do padrão Composite:**
+- Trata objetos individuais e composições de forma uniforme.
+- Permite a criação de estruturas em árvore complexas de forma simples.
+- Facilita a adição e remoção de elementos na estrutura.
+- Simplifica a interação com a hierarquia de objetos.
+
+Observação: Lembre-se de que este é um exemplo simples do padrão Composite e pode ser mais complexo dependendo do contexto e dos requisitos do sistema. Além disso, a estrutura em árvore pode ser expandida para incluir outras funcionalidades e comportamentos conforme necessário.
 
 
 ## Padrões de Estrutura: Adapter
