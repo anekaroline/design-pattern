@@ -30,6 +30,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Estrutura: Adapter](#padrões-de-estrutura-adapter)
 - [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
 - [Padrões de Estrutura: Composite](#padrões-de-estrutura-composite)
+- [Padrões de Estrutura: Decorator](#padrões-de-estrutura-decorator)
 ## Padrões de Projeto
 
 A seguir, são apresentados os principais padrões de projeto abordados neste repositório:
@@ -848,6 +849,88 @@ Dessa forma, o padrão Bridge desacopla a lógica de negócio da transmissão ao
 
 Observação: Lembre-se de que este é um exemplo simples do padrão Bridge e pode ser mais complexo dependendo do contexto e dos requisitos do sistema.
 
+## Padrões de Estrutura: Decorator
+
+O padrão de projeto Decorator é um padrão estrutural que permite adicionar comportamentos ou responsabilidades adicionais a objetos de forma dinâmica, sem precisar alterar sua estrutura básica. Ele oferece uma alternativa flexível à criação de subclasses para estender funcionalidades.
+
+### Contexto
+
+Suponha que você esteja desenvolvendo um sistema para uma cafeteria que oferece diversos tipos de café. Cada café pode ter diferentes sabores extras, como baunilha, caramelo, chocolate, etc.
+
+### Problema
+
+Você precisa permitir que os clientes personalizem seus cafés escolhendo entre várias opções de sabores extras. Além disso, é necessário que essas escolhas possam ser combinadas de forma flexível, sem criar uma explosão de subclasses para cada combinação possível.
+
+### Solução
+
+O padrão Decorator resolve esse problema adicionando uma série de decoradores que envolvem o objeto principal (componente) e fornecem funcionalidades extras. Cada decorador implementa a mesma interface do componente principal, permitindo que eles sejam usados de forma transparente em seu lugar.
+
+### Exemplo em Kotlin
+
+```kotlin
+interface Cafe {
+    fun getDescricao(): String
+    fun getValor(): Double
+}
+
+class CafeBasico : Cafe {
+    override fun getDescricao(): String {
+        return "Café simples"
+    }
+
+    override fun getValor(): Double {
+        return 2.0
+    }
+}
+
+class BaunilhaDecorator(private val cafe: Cafe) : Cafe {
+    override fun getDescricao(): String {
+        return cafe.getDescricao() + ", com sabor de baunilha"
+    }
+
+    override fun getValor(): Double {
+        return cafe.getValor() + 1.0
+    }
+}
+
+class CarameloDecorator(private val cafe: Cafe) : Cafe {
+    override fun getDescricao(): String {
+        return cafe.getDescricao() + ", com sabor de caramelo"
+    }
+
+    override fun getValor(): Double {
+        return cafe.getValor() + 1.5
+    }
+}
+
+fun main() {
+    var meuCafe: Cafe = CafeBasico()
+    println("Descrição: " + meuCafe.getDescricao())
+    println("Valor: R$" + meuCafe.getValor())
+
+    // Adicionando sabores extras usando decoradores
+    meuCafe = BaunilhaDecorator(meuCafe)
+    println("Descrição: " + meuCafe.getDescricao())
+    println("Valor: R$" + meuCafe.getValor())
+
+    meuCafe = CarameloDecorator(meuCafe)
+    println("Descrição: " + meuCafe.getDescricao())
+    println("Valor: R$" + meuCafe.getValor())
+}
+```
+Neste exemplo, temos a interface `Cafe`, que representa o componente principal. A classe `CafeBasico` é uma implementação concreta dessa interface, representando um café simples sem nenhum sabor extra.
+
+Em seguida, temos os decoradores `BaunilhaDecorator` e `CarameloDecorator`, que implementam a interface `Cafe` e possuem um atributo para armazenar a instância do café que eles estão decorando. Dessa forma, podemos adicionar dinamicamente o sabor de baunilha ou caramelo ao café base.
+
+Ao usar os decoradores, podemos criar combinações flexíveis de sabores extras sem a necessidade de criar uma classe específica para cada combinação possível. Isso mantém o código mais limpo e facilita a adição de novos sabores no futuro.
+
+**Benefícios do padrão Decorator:**
+- Permite adicionar comportamentos extras a objetos de forma dinâmica.
+- Evita a explosão de subclasses para diferentes combinações de funcionalidades.
+- Facilita a composição flexível de objetos com diferentes responsabilidades.
+- Promove a manutenção e extensão do código de forma mais organizada.
+
+Observação: Lembre-se de que este é apenas um exemplo básico do padrão Decorator, e ele pode ser aplicado em contextos mais complexos com uma variedade maior de funcionalidades decoradoras.
 
 
 ## Licença
