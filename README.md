@@ -31,6 +31,8 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Estrutura: Bridge](#padrões-de-estrutura-bridge)
 - [Padrões de Estrutura: Composite](#padrões-de-estrutura-composite)
 - [Padrões de Estrutura: Decorator](#padrões-de-estrutura-decorator)
+- [Padrões de Estrutura: Facade](#padrões-de-estrutura-facade)
+   
 ## Padrões de Projeto
 
 A seguir, são apresentados os principais padrões de projeto abordados neste repositório:
@@ -931,6 +933,106 @@ Ao usar os decoradores, podemos criar combinações flexíveis de sabores extras
 - Promove a manutenção e extensão do código de forma mais organizada.
 
 Observação: Lembre-se de que este é apenas um exemplo básico do padrão Decorator, e ele pode ser aplicado em contextos mais complexos com uma variedade maior de funcionalidades decoradoras.
+
+## Padrões de Estrutura: Facade
+
+O padrão de projeto Facade é um padrão estrutural que tem como objetivo fornecer uma interface simplificada para um conjunto de interfaces complexas em um subsistema. Ele atua como uma "fachada" que oculta a complexidade interna e fornece uma única interface mais simples para interagir com o sistema.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo um sistema para uma loja online. Nesse sistema, existem várias classes e subsistemas complexos, como o carrinho de compras, o processamento de pagamentos e o envio de produtos.
+
+### Problema
+
+Você precisa criar uma forma mais simples de interagir com todo o processo de compra sem que os clientes tenham que lidar diretamente com a complexidade dos subsistemas.
+
+### Solução
+
+O padrão Facade resolve esse problema criando uma fachada que encapsula a lógica e a complexidade dos subsistemas. Essa fachada fornece uma interface única e mais simples para que os clientes possam interagir com o sistema, ocultando as interações complexas e tornando o processo mais fácil de usar.
+
+### Exemplo em Kotlin
+
+```kotlin
+// Subsistema de Produto
+class Produto(val nome: String, val preco: Double)
+
+// Subsistema de Carrinho de Compras
+class CarrinhoDeCompras{
+    private val produtos = mutableListOf<Produto>()
+
+    fun addProduto(produto: Produto){
+        produtos.add(produto)
+    }
+
+    fun removeProduto(produto: Produto){
+        produtos.remove(produto)
+    }
+
+    fun calcularTotal(): Double{
+        var total = 0.0
+        produtos.forEach { total += it.preco }
+        return total
+    }
+}
+
+// Subsistema de Pagamento
+class Pagamento {
+    fun processarPagamento(valor: Double){
+        println("Pagamento de R$${valor} realizado com sucesso.")
+    }
+}
+
+// Subsistema de Envio
+class Envio{
+    fun enviarProdutos(){
+        println("Produto enviado")
+    }
+}
+
+// Facade - LojaOnlineFacade
+class LojaOnlineFacade{
+    private var carrinhoDeCompras = CarrinhoDeCompras()
+    private var pagamento = Pagamento()
+    private var envio = Envio()
+
+    fun addProdutosAoCarrinho(produto: Produto){
+        carrinhoDeCompras.addProduto(produto)
+        println("${produto.nome} adicionado ao carrinho")
+    }
+
+    fun finalizarCompra(){
+        val total = carrinhoDeCompras.calcularTotal()
+        pagamento.processarPagamento(total)
+        envio.enviarProdutos()
+        println("Compra finalizada com sucesso!")
+    }
+}
+
+fun main() {
+    val lojaOnlineFacade = LojaOnlineFacade()
+
+    val produto1 = Produto("Camiseta", 25.99)
+    val produto2 = Produto("Saia", 45.50)
+
+    lojaOnlineFacade.addProdutosAoCarrinho(produto1)
+    lojaOnlineFacade.addProdutosAoCarrinho(produto2)
+
+    lojaOnlineFacade.finalizarCompra()
+}
+```
+
+Neste exemplo, temos um sistema de loja online com diferentes subsistemas: Produto, CarrinhoDeCompras, Pagamento e Envio. A classe LojaOnlineFacade atua como uma fachada que encapsula a complexidade desses subsistemas.
+
+Através da LojaOnlineFacade, os clientes podem adicionar produtos ao carrinho de compras de forma simples, sem precisar interagir diretamente com as classes complexas de CarrinhoDeCompras, Pagamento e Envio. A fachada abstrai a lógica desses subsistemas e fornece uma interface única e mais fácil de usar para finalizar a compra.
+
+**Benefícios do padrão Facade:**
+
+- Simplifica a interação com subsistemas complexos.
+- Oculta a complexidade interna dos subsistemas dos clientes.
+- Facilita a manutenção e a evolução do sistema, pois as mudanças podem ser feitas na fachada sem afetar os clientes.
+- Melhora a legibilidade e reutilização do código.
+
+Lembre-se de que o padrão Facade é útil quando um sistema tem interfaces complexas e uma fachada mais simples pode melhorar a experiência de uso e manutenção. Em sistemas mais complexos, a fachada pode conter mais métodos para interagir com diferentes partes do sistema, mas seu objetivo principal é sempre fornecer uma interface simplificada.
 
 
 ## Licença
