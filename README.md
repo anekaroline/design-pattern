@@ -32,6 +32,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Estrutura: Composite](#padrões-de-estrutura-composite)
 - [Padrões de Estrutura: Decorator](#padrões-de-estrutura-decorator)
 - [Padrões de Estrutura: Facade](#padrões-de-estrutura-facade)
+- [Padrões de Estrutura: Flyweight](#padrões-de-estrutura-flyweight)
    
 ## Padrões de Projeto
 
@@ -1034,6 +1035,83 @@ Através da LojaOnlineFacade, os clientes podem adicionar produtos ao carrinho d
 
 Lembre-se de que o padrão Facade é útil quando um sistema tem interfaces complexas e uma fachada mais simples pode melhorar a experiência de uso e manutenção. Em sistemas mais complexos, a fachada pode conter mais métodos para interagir com diferentes partes do sistema, mas seu objetivo principal é sempre fornecer uma interface simplificada.
 
+## Padrões de Estrutura: Flyweight
+
+O padrão de projeto Flyweight é um padrão estrutural que visa otimizar o uso de objetos compartilhando eficientemente dados intrínsecos entre várias instâncias, reduzindo a redundância de informações e, consequentemente, economizando recursos de memória.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo uma aplicação gráfica que lida com a renderização de várias formas geométricas, como círculos e quadrados, em uma área de desenho. Cada forma pode ter diferentes propriedades, como posição, tamanho e cor.
+
+### Problema
+
+Ao criar e renderizar muitas instâncias de formas, você percebe que há uma grande duplicação de cores, pois muitas formas têm a mesma cor. Isso leva ao desperdício de memória, pois cada forma mantém sua própria cópia dos dados da cor, mesmo quando são idênticas.
+
+### Solução
+
+O padrão Flyweight resolve esse problema através da criação de uma estrutura compartilhada para armazenar dados intrínsecos que podem ser reutilizados por várias instâncias de objetos. Em vez de cada objeto de forma armazenar sua própria cor, eles farão referência a um objeto flyweight comum para cores idênticas.
+
+### Exemplo em Kotlin
+
+```kotlin
+class FlyweightColor(val name: String = "")
+
+class ColorFactory {
+    private val colorCache = HashMap<String, FlyweightColor>()
+
+    fun getColor(name: String): FlyweightColor {
+        var color = colorCache[name]
+        if (color == null) {
+            color = FlyweightColor(name)
+            colorCache[name] = color
+        }
+        return color
+    }
+}
+
+class Shape(
+    private var type: String = "",
+    private var x: Int = 0,
+    private var y: Int = 0,
+    private var width: Int = 0,
+    private var height: Int = 0,
+    private var color: FlyweightColor = FlyweightColor()
+) {
+    fun draw() {
+        println("Drawing a $type at position ($x, $y) with size $width x $height and color ${color.name}")
+    }
+}
+
+fun main() {
+    val colorFactory = ColorFactory()
+
+    val red: FlyweightColor = colorFactory.getColor("Red")
+    val blue: FlyweightColor = colorFactory.getColor("Blue")
+    val green: FlyweightColor = colorFactory.getColor("Green")
+
+    val circle1 = Shape("Circle", 10, 20, 30, 30, red)
+    val circle2 = Shape("Circle", 50, 60, 40, 40, red)
+    val square1 = Shape("Circle", 100, 150, 50, 50, blue)
+    val square2 = Shape("Circle", 200, 250, 60, 60, green)
+
+    circle1.draw()
+    circle2.draw()
+    square1.draw()
+    square2.draw()
+}
+```
+
+Neste exemplo, implementamos o padrão Flyweight utilizando a classe `FlyweightColor`. A `ColorFactory` é responsável por gerenciar e fornecer instâncias compartilhadas de cores (flyweights). Cada vez que uma cor é solicitada, a fábrica verifica se já existe uma instância com a cor especificada no cache. Se existir, ela é reutilizada; caso contrário, uma nova instância é criada e adicionada ao cache para uso futuro.
+
+As instâncias de `Shape`, como `circle1`, `circle2`, `square1` e `square2`, referenciam os objetos `FlyweightColor` compartilhados em vez de manterem suas próprias cópias de cores. Dessa forma, economizamos recursos de memória, pois múltiplas formas com a mesma cor compartilham a mesma instância flyweight.
+
+**Benefícios do padrão Flyweight:**
+- Reduz a quantidade de objetos em memória.
+- Compartilha eficientemente dados intrínsecos entre várias instâncias.
+- Melhora o desempenho e a eficiência do sistema.
+- Ajuda a lidar com grandes quantidades de objetos, mantendo o uso de memória sob controle.
+
+Observação: É importante notar que o padrão Flyweight é mais eficaz quando há uma grande quantidade de objetos com dados intrínsecos repetidos. Para casos com poucas instâncias ou com dados extrínsecos (que variam de uma instância para outra), o padrão pode não trazer benefícios significativos.
 
 ## Licença
 
