@@ -33,6 +33,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Estrutura: Decorator](#padrões-de-estrutura-decorator)
 - [Padrões de Estrutura: Facade](#padrões-de-estrutura-facade)
 - [Padrões de Estrutura: Flyweight](#padrões-de-estrutura-flyweight)
+- [Padrões de Estrutura: Proxy](#padrões-de-estrutura-proxy)
    
 ## Padrões de Projeto
 
@@ -1112,6 +1113,83 @@ As instâncias de `Shape`, como `circle1`, `circle2`, `square1` e `square2`, ref
 - Ajuda a lidar com grandes quantidades de objetos, mantendo o uso de memória sob controle.
 
 Observação: É importante notar que o padrão Flyweight é mais eficaz quando há uma grande quantidade de objetos com dados intrínsecos repetidos. Para casos com poucas instâncias ou com dados extrínsecos (que variam de uma instância para outra), o padrão pode não trazer benefícios significativos.
+
+## Padrões de Estrutura: Proxy
+
+O padrão de projeto Proxy é um padrão estrutural que tem como objetivo controlar o acesso a um objeto, agindo como intermediário entre o cliente e o objeto real. O Proxy pode ser usado para adicionar funcionalidades extras, como controle de acesso, cache, logging ou até mesmo adiar a criação do objeto real para quando ele for realmente necessário.
+
+### Contexto
+
+Imagine que você esteja desenvolvendo uma aplicação de navegação na web. Nessa aplicação, os usuários podem acessar diversos sites através de uma conexão à Internet.
+
+### Problema
+
+Você precisa controlar o acesso aos sites e, em alguns casos, bloquear o acesso a sites inadequados, definidos por uma lista de sites proibidos.
+
+### Solução
+
+O padrão Proxy resolve esse problema introduzindo um novo objeto intermediário chamado ProxyInternet. Esse proxy implementa a mesma interface que o objeto real (Internet), mas adiciona funcionalidades extras antes ou depois de chamar os métodos do objeto real.
+
+### Exemplo em Kotlin
+
+```kotlin
+interface Internet {
+    fun conectarAoSite(url: String)
+}
+
+class InternetReal : Internet {
+    override fun conectarAoSite(url: String) {
+        println("Conectando ao site: $url")
+    }
+}
+
+class ProxyInternet : Internet {
+
+    private var internet = InternetReal()
+    private var sitesProibidos = mutableListOf<String>("site-improprio.com", "conteudo-inadequado.net")
+
+    override fun conectarAoSite(url: String) {
+        if (sitesProibidos.contains(url)) {
+            println("Acesso bloqueado ao site: $url")
+        } else {
+            internet.conectarAoSite(url)
+        }
+    }
+}
+
+fun main() {
+    val internet: Internet = ProxyInternet()
+
+    internet.conectarAoSite("google.com") // Acesso permitido ao site: google.com
+    internet.conectarAoSite("site-improprio.com") // Acesso bloqueado ao site: site-improprio.com
+    internet.conectarAoSite("yahoo.com") // Acesso permitido ao site: yahoo.com
+}
+```
+
+Neste exemplo, temos a interface `Internet`, que representa a conexão ao site. A classe concreta `InternetReal` implementa essa interface e representa a conexão real à Internet.
+
+Em seguida, temos a classe `ProxyInternet`, que atua como um intermediário entre o cliente e o objeto real `InternetReal`. Antes de permitir o acesso ao site, o proxy verifica se o site está presente na lista de sites proibidos. Se estiver, o acesso é bloqueado; caso contrário, o proxy encaminha a solicitação para o objeto real `InternetReal`.
+
+Existem diferentes tipos de Proxies, cada um com sua finalidade específica:
+
+1. **Proxy Virtual**: Adia a criação do objeto real até que ele seja realmente necessário. Isso é útil quando o objeto real é pesado ou consome muitos recursos e sua criação pode ser adiada.
+
+2. **Proxy Remoto**: Gerencia a comunicação entre objetos localizados em diferentes espaços de endereçamento. É útil quando você deseja trabalhar com objetos remotos como se estivessem localmente.
+
+3. **Proxy de Proteção**: Controla o acesso ao objeto real, adicionando permissões, autenticação ou outras formas de controle de acesso.
+
+4. **Proxy de Cache**: Armazena em cache os resultados de operações caras para evitar repetições desnecessárias do mesmo trabalho.
+
+No exemplo dado, temos um exemplo de Proxy de Proteção, pois ele bloqueia o acesso a sites proibidos antes de encaminhar a solicitação para o objeto real.
+
+**Benefícios do padrão Proxy:**
+- Controle de acesso e autorização.
+- Redução de recursos, adiando a criação de objetos pesados.
+- Cache para melhorar o desempenho e reduzir a latência.
+- Logging e monitoramento de acesso ao objeto real.
+
+Observação: Lembre-se de que este é um exemplo simples do padrão Proxy e pode ser mais complexo dependendo do contexto e dos requisitos do sistema. Existem muitas outras aplicações e variações do padrão Proxy que podem ser exploradas para atender a diferentes necessidades.
+
 
 ## Licença
 
