@@ -34,6 +34,7 @@ Neste repositório, você encontrará exemplos práticos dos padrões de projeto
 - [Padrões de Estrutura: Facade](#padrões-de-estrutura-facade)
 - [Padrões de Estrutura: Flyweight](#padrões-de-estrutura-flyweight)
 - [Padrões de Estrutura: Proxy](#padrões-de-estrutura-proxy)
+- [Padrões de Comportamento: Chain of Resposability](#padrões-de-comportamento-chain-of-responsability)
    
 ## Padrões de Projeto
 
@@ -1189,6 +1190,115 @@ No exemplo dado, temos um exemplo de Proxy de Proteção, pois ele bloqueia o ac
 - Logging e monitoramento de acesso ao objeto real.
 
 Observação: Lembre-se de que este é um exemplo simples do padrão Proxy e pode ser mais complexo dependendo do contexto e dos requisitos do sistema. Existem muitas outras aplicações e variações do padrão Proxy que podem ser exploradas para atender a diferentes necessidades.
+
+## Padrões de Comportamento: Chain of Responsability
+
+O padrão de projeto Chain of Responsibility é um padrão comportamental que permite que múltiplos objetos possam tratar uma solicitação sem que o remetente precise saber qual objeto irá tratá-la. Ele estabelece uma cadeia de objetos receptores, onde cada receptor contém uma referência ao próximo receptor na cadeia. A solicitação é passada ao longo da cadeia até que um dos objetos seja capaz de tratá-la.
+
+### Contexto
+
+Vamos imaginar um sistema de aprovação de despesas em uma empresa. Nesse sistema, cada despesa passa por uma série de níveis hierárquicos, como o Gerente de Equipe, Gerente de Departamento e Diretor Financeiro. Cada nível tem um limite de aprovação diferente. Se a despesa exceder o limite de um nível, ela deve ser encaminhada para o próximo nível da hierarquia.
+
+### Problema
+
+Você precisa implementar um mecanismo que permita que cada nível hierárquico de aprovação trate as despesas de acordo com seu limite de aprovação. Além disso, você quer evitar acoplamento entre os diferentes níveis da hierarquia.
+
+### Solução
+
+O padrão Chain of Responsibility resolve esse problema criando uma cadeia de objetos que tratam a solicitação de forma hierárquica. Cada objeto na cadeia é responsável por decidir se pode ou não tratar a solicitação. Se puder, trata a solicitação; caso contrário, passa a solicitação para o próximo objeto na cadeia.
+
+### Exemplo em Kotlin
+
+```kotlin
+class Expense(val description: String, val amount: Double)
+
+interface ExpenseHandler{
+    fun approveExpense(expense: Expense)
+    fun setNextHandler(nextHandler: ExpenseHandler?)
+}
+
+class TeamLead(private var approvalLimit: Double): ExpenseHandler{
+    private var nextHandler: ExpenseHandler? = null
+
+    override fun approveExpense(expense: Expense) {
+        if(expense.amount <= approvalLimit) {
+            println("Despesa aprovada pelo Gerente de Equipe. Descrição: ${expense.description}")
+        } else {
+            nextHandler?.approveExpense(expense) ?: println("A despesa não pode ser aprovada.")
+        }
+    }
+
+    override fun setNextHandler(nextHandler: ExpenseHandler?) {
+        this.nextHandler = nextHandler
+    }
+}
+
+class DepartmentManager(private var approvalLimit: Double): ExpenseHandler {
+    private var nextHandler: ExpenseHandler? = null
+
+    override fun approveExpense(expense: Expense) {
+        if (expense.amount <= approvalLimit) {
+            println("Despesa aprovada pelo Gerente de Departamento. Descrição: ${expense.description}")
+        } else {
+            nextHandler?.approveExpense(expense) ?: println("A despesa não pode ser aprovada.")
+        }
+    }
+
+    override fun setNextHandler(nextHandler: ExpenseHandler?) {
+        this.nextHandler = nextHandler
+    }
+}
+
+class FinancialDirector(private val approvalLimit: Double) : ExpenseHandler {
+    override fun setNextHandler(nextHandler: ExpenseHandler?) {
+        // Como é o último na cadeia, não precisamos definir nextHandler.
+    }
+
+    override fun approveExpense(expense: Expense) {
+        if (expense.amount <= approvalLimit) {
+            println("Despesa aprovada pelo Diretor Financeiro. Descrição: ${expense.description}")
+        } else {
+            println("A despesa não pode ser aprovada.")
+        }
+    }
+}
+
+
+
+
+fun main() {
+    // Criando a corrente de responsabilidade
+    val teamLead = TeamLead(100.0)
+    val departmentManager = DepartmentManager(1000.0)
+    val financialDirector = FinancialDirector(5000.0)
+
+    teamLead.setNextHandler(departmentManager)
+    departmentManager.setNextHandler(financialDirector)
+
+    // Simulando solicitações de despesas
+    val expense1 = Expense("Material de escritório", 50.0)
+    val expense2 = Expense("Viagem de negócios", 1500.0)
+    val expense3 = Expense("Projeto de investimento", 10000.0)
+
+    teamLead.approveExpense(expense1)
+    teamLead.approveExpense(expense2)
+    teamLead.approveExpense(expense3)
+}
+```
+
+Neste exemplo, temos três classes concretas de `ExpenseHandler`: `TeamLead`, `DepartmentManager` e `FinancialDirector`. Cada uma dessas classes representa um nível hierárquico de aprovação e possui um limite de aprovação específico.
+
+Quando uma despesa é submetida para aprovação, ela é encaminhada ao primeiro nível da hierarquia, representado pela instância `teamLead`. Se a despesa não puder ser aprovada pelo `TeamLead`, ela é passada para o próximo nível (representado por `departmentManager`), e assim por diante, até que a despesa seja aprovada ou rejeitada por um dos níveis.
+
+O padrão Chain of Responsibility permite que os níveis hierárquicos de aprovação sejam facilmente adicionados, removidos ou reordenados sem afetar o restante do sistema, fornecendo uma solução flexível e de baixo acoplamento para o problema de aprovação de despesas.
+
+**Benefícios do padrão Chain of Responsibility:**
+- Desacopla o remetente do receptor das solicitações.
+- Permite que vários objetos possam tratar a solicitação.
+- Facilita a adição ou remoção de novos tratadores de solicitação sem modificar o código do remetente.
+- Promove uma maior flexibilidade e extensibilidade no tratamento de solicitações.
+
+
 
 
 ## Licença
